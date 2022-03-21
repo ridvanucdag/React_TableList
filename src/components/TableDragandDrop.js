@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import './Listtable.css'
 
 import ProductService from "../services/Products"
 
-const table = () => {
+
+const TableDragandDrop = () => {
 
   const [product, setProduct] = useState([])
   const [search,setSearch] = useState('')
+
+  const handleDragEnd = (results) =>{
+    if(!results.destination) return;
+    let tempproduct = [...product]
+    let [slectedProduct] = tempproduct.splice(results.source.index, 1)
+    tempproduct.splice(results.destination.index, 0, slectedProduct)
+    setProduct(tempproduct)
+    return tempproduct
+  }
 
   useEffect(()=>{
     let productService = new ProductService()
@@ -20,7 +31,7 @@ const table = () => {
         <div className="table-wrapper">
           <div className="table-title">
             <div className="row">
-              <div className="col-sm-8"><h2>Form <b>List</b></h2></div>
+              <div className="col-sm-8"><h2><b>Rıdvan Üçdağ</b> - Form List</h2></div>
               <div className="col-sm-4">
                 <div className="search-box">
                   <input type="text" className="form-control" placeholder="Search.." onChange={e=> setSearch(e.target.value)} />
@@ -28,6 +39,7 @@ const table = () => {
               </div>
             </div>
           </div>
+          <DragDropContext onDragEnd={(results)=> handleDragEnd(results)}>
           <table className="table table-striped table-hover table-bordered">
             <thead>
               <tr>
@@ -46,7 +58,10 @@ const table = () => {
                 <th scope="col">Settings</th>
               </tr>
             </thead>
-            <tbody>
+
+            <Droppable droppableId='tboddy'>
+              {(provided)=>(
+            <tbody ref={provided.innerRef} {...provided.droppableProps}>
                 {
                       product.filter((pro)=>{
                         if(search==="") {
@@ -56,11 +71,14 @@ const table = () => {
                           return pro
                         }
                       })
-                      .map(pro=>(
-                  <tr key={pro.id}>
+                      .map((pro,index)=>(
+                        <Draggable key={pro.id} draggableId={pro.name} index={index}>
+                          {(provided)=>(
+                        
+                  <tr ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
 
-                   <td>{pro.id}</td>
-                    <td>{pro.name}</td>
+                   <td >{pro.id}</td>
+                    <td >{pro.name}</td>
                     <td>{pro.username}</td>
                     <td>{pro.email}</td>
                     <td>{pro.address.street}</td>
@@ -78,19 +96,22 @@ const table = () => {
                      
                     
                   </tr>
-                   ))
-                  }
+                  )}
+                  </Draggable>
+                   ))}
+                   {provided.placeholder}
             </tbody>
+            )}
+            </Droppable>
           </table>
+          </DragDropContext>
           <div className="clearfix">
             <div className="hint-text">Toplam <b>25</b> üründen ilk <b>{product.length}</b> tanesi gösteriliyor</div>
             <ul className="pagination">
               <li className="page-item disabled"><a href="#"><i className="fa fa-angle-double-left"></i></a></li>
-              <li className="page-item"><a href="#" className="page-link">1</a></li>
+              <li className="page-item active"><a href="#" className="page-link">1</a></li>
               <li className="page-item"><a href="#" className="page-link">2</a></li>
-              <li className="page-item active"><a href="#" className="page-link">3</a></li>
-              <li className="page-item"><a href="#" className="page-link">4</a></li>
-              <li className="page-item"><a href="#" className="page-link">5</a></li>
+              <li className="page-item "><a href="#" className="page-link">3</a></li>
               <li className="page-item"><a href="#" className="page-link"><i className="fa fa-angle-double-right"></i></a></li>
             </ul>
           </div>
@@ -100,7 +121,7 @@ const table = () => {
   )
 }
 
-export default table
+export default TableDragandDrop
 
 
 

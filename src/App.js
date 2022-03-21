@@ -1,11 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
-import Table from './components/table';
+import TableDragandDrop from "./components/TableDragandDrop"
 
 function App() {
   return (
     <div className="App">
-      <Table/>
+      <TableDragandDrop/>
     </div>
   );
 }
