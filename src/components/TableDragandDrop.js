@@ -90,8 +90,8 @@ const TableDragandDrop = () => {
                     <td>{pro.website}</td>
                     <td>{pro.company.name}</td>
                     <td>
-                      <a href="#" className="edit" title="Edit" data-toggle="tooltip"><i className="far fa-edit">&#xE254;</i></a>
-                      <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i className="fas fa-times">&#xE872;</i></a>
+                      <a href="#" className="edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                      <a href="#" className="delete" title="Delete" data-toggle="tooltip"><i class="fas fa-trash-alt"></i></a>
                     </td>
                      
                     
